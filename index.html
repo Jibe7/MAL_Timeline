@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MAL Anime Timeline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Generate a beautiful anime timeline dashboard from your MyAnimeList XML export.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <section class="hero" id="uploadHero">
+    <div>
+      <p class="eyebrow">MyAnimeList XML Visualizer</p>
+      <h1>Your Anime Timeline</h1>
+      <p class="subtitle">
+        Upload your MAL XML export and generate a private, interactive timeline with scores,
+        watch dates, filters, MAL links, and live cover thumbnails.
+      </p>
+
+      <div class="upload-panel">
+        <label class="file-picker">
+          <input id="xmlInput" type="file" accept=".xml,text/xml,application/xml">
+          <span>Choose MAL XML file</span>
+        </label>
+        <button class="reload-btn primary" id="sampleBtn" type="button">Load tiny sample</button>
+        <p class="privacy-note">
+          Your XML is parsed locally in your browser. It is not uploaded anywhere.
+          Covers are fetched live from the public Jikan API using MAL anime IDs.
+        </p>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <strong>How to export from MAL</strong>
+      <ol>
+        <li>Go to MyAnimeList export.</li>
+        <li>Download your anime list XML.</li>
+        <li>Upload it here.</li>
+      </ol>
+      <a href="https://myanimelist.net/panel.php?go=export" target="_blank" rel="noreferrer">Open MAL export page →</a>
+    </div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="hero dashboard-hero">
+      <div>
+        <p class="eyebrow">Generated from your XML</p>
+        <h1>Your Anime Timeline</h1>
+        <p class="subtitle">
+          Grouped by year and month, searchable, filterable, scored, and linked to MyAnimeList.
+        </p>
+        <div class="global-actions">
+          <button class="reload-btn" onclick="retryVisibleMissingCovers(event)">Retry missing covers shown</button>
+          <button class="reload-btn" onclick="retryAllVisibleCovers(event)">Reload all covers shown</button>
+          <button class="reload-btn" onclick="resetApp()">Upload another XML</button>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="stat-count">0</strong><span>shown</span></div>
+        <div class="stat"><strong id="stat-avg">—</strong><span>avg score</span></div>
+        <div class="stat"><strong id="stat-top">—</strong><span>9–10s</span></div>
+        <div class="stat"><strong id="stat-years">—</strong><span>years</span></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="search" placeholder="Search anime title...">
+      <select id="minScore">
+        <option value="0">All scores</option>
+        <option value="5">5+</option>
+        <option value="7">7+</option>
+        <option value="8">8+</option>
+        <option value="9">9+</option>
+        <option value="10">10 only</option>
+      </select>
+      <select id="status">
+        <option value="">All statuses</option>
+        <option value="Completed">Completed</option>
+        <option value="Dropped">Dropped</option>
+        <option value="Watching">Watching</option>
+        <option value="On-Hold">On-Hold</option>
+        <option value="Plan to Watch">Plan to Watch</option>
+      </select>
+      <select id="year">
+        <option value="">All years</option>
+      </select>
+      <select id="sort">
+        <option value="dateAsc">Oldest first</option>
+        <option value="dateDesc">Newest first</option>
+        <option value="scoreDesc">Highest score</option>
+        <option value="scoreAsc">Lowest score</option>
+        <option value="titleAsc">A–Z</option>
+      </select>
+    </div>
+
+    <div id="timeline"></div>
+
+    <div class="footer">
+      Covers are loaded live from the public Jikan API. If a cover fails because of rate limiting,
+      use the retry buttons globally or per month. Title cards still open the MAL page.
+    </div>
+  </section>
+
+  <div id="errorBox" class="error hidden"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
