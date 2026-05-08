@@ -296,17 +296,28 @@ function render() {
 
   const groups = groupList(list);
   let html = "";
+  const sort = document.getElementById("sort").value;
 
-  for (const [year, months] of Object.entries(groups)) {
+  let yearEntries = Object.entries(groups);
+
+  if (sort === "dateDesc") {
+    yearEntries.sort(([a], [b]) => Number(b) - Number(a));
+  } else if (sort === "dateAsc") {
+    yearEntries.sort(([a], [b]) => Number(a) - Number(b));
+  }
+
+  for (const [year, months] of yearEntries) {
     html += `<section class="year-block"><h2 class="year-title">${year}</h2>`;
 
-    for (const [month, items] of Object.entries(months)) {
-      if (month) {
-        const safeMonth = escapeHtml(month);
-        html += `<h3 class="month">${safeMonth} <small>${items.length} anime</small><span class="section-actions"><button class="reload-btn" onclick="retryMonthCovers(event, '${safeMonth}')">Retry this month</button></span></h3>`;
-      }
-      html += `<div class="grid">${items.map(card).join("")}</div>`;
+    let monthEntries = Object.entries(months);
+
+  for (const [month, items] of monthEntries) {
+    if (month) {
+      const safeMonth = escapeHtml(month);
+      html += `<h3 class="month">${safeMonth} <small>${items.length} anime</small><span class="section-actions"><button class="reload-btn" onclick="retryMonthCovers(event, '${safeMonth}')">Retry this month</button></span></h3>`;
     }
+    html += `<div class="grid">${items.map(card).join("")}</div>`;
+  }
 
     html += `</section>`;
   }
