@@ -22,3 +22,6 @@ Open `index.html` in your browser.
 2. Go to: https://myanimelist.net/panel.php?go=export
 3. Export the anime list XML.
 4. Upload that XML into this app.
+
+## Preview when your MAL XML export is loaded
+![image](preview.png)
